@@ -226,42 +226,23 @@
     }, 800);
   }
 
-  // 카카오톡 공유
+// 카카오톡 공유
   function shareKakao() {
-    // 현재 페이지 URL (캐시 방지용 타임스탬프 추가)
-    var currentUrl = window.location.origin + window.location.pathname + '?p=' + photoFile + '&t=' + Date.now();
+    var url = window.location.href;
     
-    // 이미지 URL (R2에서 직접 가져오기, JPG/PNG 권장)
-    // GIF는 카카오에서 문제가 생길 수 있으므로 로고를 기본값으로 사용
-    var imageUrl = photoURL;
-    
-    // 파일이 GIF인 경우 로고로 대체 (카카오가 GIF를 잘 처리 못함)
-    if (photoFile.toLowerCase().endsWith('.gif')) {
-      imageUrl = 'https://ppplab-official.github.io/exhibition/logo.png';
-    }
-
-    Kakao.Share.sendDefault({
-      objectType: 'feed',
-      content: {
+    if (navigator.share) {
+      navigator.share({
         title: 'PPPLAB 월드컵XR Photo Booth',
-        description: '#월드컵XR #OOO브랜드',
-        imageUrl: imageUrl,
-        link: {
-          mobileWebUrl: currentUrl,
-          webUrl: currentUrl
-        }
-      },
-      buttons: [
-        {
-          title: '사진 보기',
-          link: {
-            mobileWebUrl: currentUrl,
-            webUrl: currentUrl
-          }
-        }
-      ]
-    });
+        text: '#월드컵XR #OOO브랜드',
+        url: url
+      });
+    } else {
+      navigator.clipboard.writeText(url).then(function() {
+        alert('링크가 복사되었습니다!\n카카오톡에 붙여넣기 해주세요.');
+      });
+    }
   }
+  
 </script>
 
 </body>
