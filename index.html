@@ -67,6 +67,16 @@
     color: #555;
     font-size: 14px;
   }
+  .hint {
+    font-size: 14px;
+    color: #9a9a9a;
+    text-align: center;
+    margin-bottom: 14px;
+    line-height: 1.4;
+    animation: fadeUp 0.7s ease-out 0.25s both;
+  }
+  <!-- 안내 문구 (해시태그 위) -->
+  <div class="hint">사진을 길게 눌러 저장해주세요.</div>
 
   /* 해시태그 */
   .hashtags {
@@ -207,7 +217,7 @@
       <!-- 인스타그램 스토리 공유 -->
       <button class="share-btn instagram" onclick="shareInstagram()">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-        인스타그램
+        스토리
       </button>
 
       <!-- 카카오톡 공유 -->
@@ -217,11 +227,7 @@
       </button>
     </div>
 
-    <!-- 다운로드 -->
-    <a class="download-btn" id="downloadBtn" download>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      사진 저장하기
-    </a>
+   
   </div>
 
   <div class="credit">© PPPLAB</div>
@@ -244,19 +250,15 @@
   // 인스타그램 공유
   // 인스타그램은 웹에서 직접 스토리 공유 API가 없어서,
   // 이미지를 저장 후 인스타에서 올리도록 안내합니다.
-  function shareInstagram() {
-    // 모바일에서 이미지 다운로드 후 인스타 앱 열기
-    const link = document.createElement('a');
-    link.href = photoURL;
-    link.download = photoFile;
-    link.click();
+function shareInstagram() {
+  // 인스타 스토리 카메라 열기만 시도
+  window.location.href = 'instagram://story-camera';
 
-    setTimeout(() => {
-      alert('사진이 저장되었습니다!\n인스타그램 스토리에서 사진을 선택해주세요.');
-      // 인스타그램 앱 열기 시도
-      window.location.href = 'instagram://story-camera';
-    }, 500);
-  }
+  // 일부 기기/브라우저는 앱 링크가 막힐 수 있어서 안내만 최소로 띄움
+  setTimeout(() => {
+    alert('인스타 스토리가 열리지 않으면,\n먼저 사진을 길게 눌러 저장한 뒤 인스타 스토리에서 선택해주세요.');
+  }, 600);
+}
 
   // 카카오톡 공유
   function shareKakao() {
@@ -307,4 +309,5 @@
 
 </body>
 </html>
+
 
