@@ -205,9 +205,9 @@
     <img id="photo" alt="Photo Booth" style="display:none;" onload="this.style.display='block'; document.getElementById('loading').style.display='none';">
   </div>
 
-<!-- 해시태그 -->
-<div class="hashtags">#월드컵XR  #OOO브랜드</div>
-
+<!-- 안내 문구 (해시태그 위) -->
+<div class="hint">사진을 길게 눌러 저장해주세요.</div>
+ 
   <!-- 해시태그 -->
   <div class="hashtags">#월드컵XR  #OOO브랜드</div>
 
@@ -246,20 +246,19 @@
 
   // 사진 로드
   document.getElementById('photo').src = photoURL;
-  document.getElementById('downloadBtn').href = photoURL;
 
   // 인스타그램 공유
   // 인스타그램은 웹에서 직접 스토리 공유 API가 없어서,
   // 이미지를 저장 후 인스타에서 올리도록 안내합니다.
 function shareInstagram() {
-  // 인스타 스토리 카메라 열기만 시도
   window.location.href = 'instagram://story-camera';
 
-  // 일부 기기/브라우저는 앱 링크가 막힐 수 있어서 안내만 최소로 띄움
+  // 인스타 앱이 없거나, 브라우저가 막으면 인스타 웹으로 이동
   setTimeout(() => {
-    alert('인스타 스토리가 열리지 않으면,\n먼저 사진을 길게 눌러 저장한 뒤 인스타 스토리에서 선택해주세요.');
-  }, 600);
+    window.location.href = 'https://www.instagram.com/';
+  }, 800);
 }
+
 
   // 카카오톡 공유
   function shareKakao() {
@@ -310,6 +309,7 @@ function shareInstagram() {
 
 </body>
 </html>
+
 
 
 
