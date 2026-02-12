@@ -227,31 +227,19 @@
   }
 
 // 카카오톡 공유
-  function shareKakao() {
-    var url = window.location.href;
-    
-    Kakao.Share.sendDefault({
-      objectType: 'feed',
-      content: {
-        title: 'PPPLAB 월드컵XR Photo Booth',
-        description: '#월드컵XR #OOO브랜드',
-        imageUrl: photoURL,
-        link: {
-          mobileWebUrl: url,
-          webUrl: url
-        }
-      },
-      buttons: [
-        {
-          title: '사진 보기',
-          link: {
-            mobileWebUrl: url,
-            webUrl: url
-          }
-        }
-      ]
-    });
-  }
+function shareKakao() {
+  var path = window.location.pathname + window.location.search;
+  
+  Kakao.Share.sendCustom({
+    templateId: 129399,
+    templateArgs: {
+      'IMG': photoURL,
+      'TITLE': 'PPPLAB 월드컵XR Photo Booth',
+      'DESC': '#월드컵XR #OOO브랜드',
+      'PATH': path
+    }
+  });
+}
   
 </script>
 
