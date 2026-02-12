@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PPPLAB Photo Booth</title>
+<meta property="og:title" content="PPPLAB 월드컵XR Photo Booth">
+<meta property="og:description" content="나만의 XR 포토부스 사진을 확인하세요!">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #000;
+    color: #fff;
+    font-family: 'Noto Sans KR', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 440px;
+    padding: 24px 20px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* 로고 */
+  .logo {
+    width: 120px;
+    margin-bottom: 20px;
+    animation: fadeDown 0.6s ease-out;
+  }
+
+  /* 사진 영역 */
+  .photo-frame {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    background: #111;
+    margin-bottom: 24px;
+    animation: fadeUp 0.7s ease-out 0.15s both;
+  }
+
+  .photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .photo-frame .loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    font-size: 14px;
+  }
+
+  /* 해시태그 */
+  .hashtags {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: #E84A2E;
+    text-align: center;
+    margin-bottom: 32px;
+    animation: fadeUp 0.7s ease-out 0.3s both;
+  }
+
+  /* 공유 버튼 영역 */
+  .share-section {
+    width: 100%;
+    animation: fadeUp 0.7s ease-out 0.45s both;
+  }
+
+  .share-label {
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+
+  .share-buttons {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .share-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 0;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+    text-decoration: none;
+    color: #fff;
+  }
+
+  .share-btn:active {
+    transform: scale(0.96);
+    opacity: 0.85;
+  }
+
+  .share-btn.instagram {
+    background: linear-gradient(135deg, #833AB4, #E1306C, #F77737);
+  }
+
+  .share-btn.kakao {
+    background: #FEE500;
+    color: #191919;
+  }
+
+  .share-btn svg {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+
+  /* 다운로드 버튼 */
+  .download-btn {
+    width: 100%;
+    margin-top: 12px;
+    padding: 16px 0;
+    border: 1.5px solid #333;
+    border-radius: 12px;
+    background: transparent;
+    color: #fff;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+
+  .download-btn:active {
+    transform: scale(0.96);
+    border-color: #666;
+  }
+
+  /* 하단 크레딧 */
+  .credit {
+    margin-top: 40px;
+    font-size: 11px;
+    color: #333;
+    letter-spacing: 1px;
+    animation: fadeUp 0.7s ease-out 0.6s both;
+  }
+
+  /* 애니메이션 */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- 로고 -->
+  <img src="logo.png" alt="PPPLAB" class="logo">
+
+  <!-- 사진 -->
+  <div class="photo-frame">
+    <div class="loading" id="loading">사진 불러오는 중...</div>
+    <img id="photo" alt="Photo Booth" style="display:none;" onload="this.style.display='block'; document.getElementById('loading').style.display='none';">
+  </div>
+
+  <!-- 해시태그 -->
+  <div class="hashtags">#월드컵XR  #OOO브랜드</div>
+
+  <!-- 공유 버튼 -->
+  <div class="share-section">
+    <div class="share-label">Share</div>
+    <div class="share-buttons">
+      <!-- 인스타그램 스토리 공유 -->
+      <button class="share-btn instagram" onclick="shareInstagram()">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        인스타그램
+      </button>
+
+      <!-- 카카오톡 공유 -->
+      <button class="share-btn kakao" onclick="shareKakao()">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.477 3 2 6.463 2 10.691c0 2.72 1.8 5.108 4.516 6.467-.178.636-.645 2.307-.739 2.666-.116.445.163.439.343.32.14-.094 2.239-1.52 3.153-2.14.879.13 1.786.197 2.727.197 5.523 0 10-3.463 10-7.691S17.523 3 12 3z"/></svg>
+        카카오톡
+      </button>
+    </div>
+
+    <!-- 다운로드 -->
+    <a class="download-btn" id="downloadBtn" download>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      사진 저장하기
+    </a>
+  </div>
+
+  <div class="credit">© PPPLAB</div>
+</div>
+
+<script>
+  // R2 공개 URL (본인 R2 버킷 URL로 변경)
+  const R2_BASE = 'https://pub-e0640be38e6e437ab229928869d7eaff.r2.dev';
+
+  // URL 파라미터에서 파일명 가져오기
+  // 사용법: index.html?p=photo001.gif
+  const params = new URLSearchParams(window.location.search);
+  const photoFile = params.get('p') || 'test.gif';
+  const photoURL = R2_BASE + '/' + photoFile;
+
+  // 사진 로드
+  document.getElementById('photo').src = photoURL;
+  document.getElementById('downloadBtn').href = photoURL;
+
+  // 인스타그램 공유
+  // 인스타그램은 웹에서 직접 스토리 공유 API가 없어서,
+  // 이미지를 저장 후 인스타에서 올리도록 안내합니다.
+  function shareInstagram() {
+    // 모바일에서 이미지 다운로드 후 인스타 앱 열기
+    const link = document.createElement('a');
+    link.href = photoURL;
+    link.download = photoFile;
+    link.click();
+
+    setTimeout(() => {
+      alert('사진이 저장되었습니다!\n인스타그램 스토리에서 사진을 선택해주세요.');
+      // 인스타그램 앱 열기 시도
+      window.location.href = 'instagram://story-camera';
+    }, 500);
+  }
+
+  // 카카오톡 공유
+  function shareKakao() {
+    // 카카오 SDK 미로드 시 링크 복사 대체
+    if (window.Kakao && Kakao.isInitialized()) {
+      Kakao.Share.sendDefault({
+        objectType: 'feed',
+        content: {
+          title: 'PPPLAB 월드컵XR Photo Booth',
+          description: '#월드컵XR #OOO브랜드',
+          imageUrl: photoURL,
+          link: {
+            mobileWebUrl: window.location.href,
+            webUrl: window.location.href,
+          },
+        },
+        buttons: [
+          {
+            title: '사진 보기',
+            link: {
+              mobileWebUrl: window.location.href,
+              webUrl: window.location.href,
+            },
+          },
+        ],
+      });
+    } else {
+      // 카카오 SDK 없으면 기본 공유
+      if (navigator.share) {
+        navigator.share({
+          title: 'PPPLAB 월드컵XR Photo Booth',
+          text: '#월드컵XR #OOO브랜드',
+          url: window.location.href,
+        });
+      } else {
+        // 클립보드 복사
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          alert('링크가 복사되었습니다!\n카카오톡에 붙여넣기 해주세요.');
+        });
+      }
+    }
+  }
+</script>
+
+<!-- 카카오 SDK (카카오 개발자 앱키 필요 - 아래 YOUR_KAKAO_APP_KEY를 교체하세요) -->
+<!-- <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.6.0/kakao.min.js"></script> -->
+<!-- <script>Kakao.init('YOUR_KAKAO_APP_KEY');</script> -->
+
+</body>
+</html>
