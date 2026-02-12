@@ -229,8 +229,16 @@
 // 카카오톡 공유
   function shareKakao() {
     var url = window.location.href;
-    var kakaoUrl = 'kakaotalk://msg/text/send?text=' + encodeURIComponent('PPPLAB 월드컵XR Photo Booth\n#월드컵XR #OOO브랜드\n\n' + url);
-    window.location.href = kakaoUrl;
+    var text = 'PPPLAB 월드컵XR Photo Booth\n#월드컵XR #OOO브랜드\n\n' + url;
+    
+    Kakao.Share.sendDefault({
+      objectType: 'text',
+      text: text,
+      link: {
+        mobileWebUrl: url,
+        webUrl: url
+      }
+    });
   }
   
 </script>
