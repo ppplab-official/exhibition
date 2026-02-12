@@ -229,18 +229,8 @@
 // 카카오톡 공유
   function shareKakao() {
     var url = window.location.href;
-    
-    if (navigator.share) {
-      navigator.share({
-        title: 'PPPLAB 월드컵XR Photo Booth',
-        text: '#월드컵XR #OOO브랜드',
-        url: url
-      });
-    } else {
-      navigator.clipboard.writeText(url).then(function() {
-        alert('링크가 복사되었습니다!\n카카오톡에 붙여넣기 해주세요.');
-      });
-    }
+    var kakaoUrl = 'kakaotalk://msg/text/send?text=' + encodeURIComponent('PPPLAB 월드컵XR Photo Booth\n#월드컵XR #OOO브랜드\n\n' + url);
+    window.location.href = kakaoUrl;
   }
   
 </script>
